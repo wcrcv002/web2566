@@ -25,6 +25,7 @@
         </div>
       );
     }
+
     function GameScene({ app }) {
       return (
         <div>
@@ -43,13 +44,13 @@
     function WinScene({ app }) {
       return (
         <div>
-          ยินดีด้วยคุณชนะแล้ว
-          <button className="btn btn-danger mx-2">
+          <button className="btn btn-danger mx-2" onClick={() => app.setState({ scene: 0 })}>
             ตกลง
           </button>
         </div>
       );
     }
+
 
     class App extends React.Component {
       title = <div><b>Work4 :</b> เกมจับคู่ภาพ ด้วย ReactJS</div>;
@@ -65,27 +66,28 @@
           cards: [],
         }
       }
+
       render() {
         var sc = <MenuScene app={this} />
-        if (this.state.scene == 1) sc = <GameScene app={this} />
-        if (this.state.scene == 2) sc = <WinScene app={this} />
+        if (this.state.scene === 1) sc = <GameScene app={this} />
+        if (this.state.scene === 2) sc = <WinScene app={this} />
         return <div className="card">
           <div className="card-header">{this.title} </div>
           <div className="card-body"> {sc} </div>
           <div className="card-footer"> {this.footer} </div>
         </div>
       }
+
       start() {
         this.cardsOpened = [];
         this.setState({ scene: 1, cards: this.shuffle(), cardsCount: 36 });
       }
 
-
       checkCard() {
         var a = this.cardsOpened[0];
         var b = this.cardsOpened[1];
         this.cardsOpened = [];
-        if (a.props.t == b.props.t) {
+        if (a.props.t === b.props.t) {
           a.setState({ s: 2 });
           b.setState({ s: 2 });
           this.setState({ cardsCount: this.state.cardsCount - 2 });
@@ -93,15 +95,15 @@
           a.setState({ s: 0 });
           b.setState({ s: 0 });
         }
-        if (this.cardsCount == 0) {
-          this.setState({ page: 2 });
+        if (this.cardsCount === 0) {
+          this.setState({ scene: 2 });
         }
       }
 
       shuffle() {
         var cards = [];
         for (var i = 1; i <= 18; i++) {
-          cards.push(<Card t={i} app={this} />); // t คือ index ของภาพ
+          cards.push(<Card t={i} app={this} />);
           cards.push(<Card t={i} app={this} />);
         }
         for (var i = 1; i < 100; i++) {
@@ -113,12 +115,11 @@
         }
         return cards;
       }
-
-
     }
 
     class Card extends React.Component {
       state = { s: 0 };
+
       render() {
         var img = (
           <img
@@ -127,16 +128,15 @@
             onClick={() => this.imgClick()}
           />
         );
-        if (this.state.s == 1) {
-          img = <img src={"work1/" + this.props.t + ".jpg"} width="100%" />;
+        if (this.state.s === 1) {
+          img = <img src={`work1/${this.props.t}.jpg`} width="100%" />;
         }
-        if (this.state.s == 2) {
-          img = <div />;  
+        if (this.state.s === 2) {
+          img = <div />;
         }
         return (
           <div className="col-2">
             {img}
-            <br />
           </div>
         );
       }
@@ -146,8 +146,8 @@
         if (app.cardsOpened.length < 2) {
           app.cardsOpened.push(this);
           this.setState({ s: 1 });
-          if (app.cardsOpened.length == 2) {
-            setTimeout(() => app.checkCard(), 2000);
+          if (app.cardsOpened.length === 2) {
+            setTimeout(() => app.checkCard(), 1000);
           }
         }
       };
